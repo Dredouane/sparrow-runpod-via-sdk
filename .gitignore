@@ -1,0 +1,39 @@
+# Python / Environnement
+##########################
+# Environnement virtuel (venv)
+venv/
+.venv/
+env/
+.env
+
+# Fichiers de cache Python
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+*.egg-info/
+.pytest_cache/
+
+# Fichiers de log et de base de données
+*.log
+*.sqlite3
+db.sqlite3
+
+# Fichiers du système d'exploitation
+.DS_Store # macOS
+Thumbs.db # Windows
+
+# Fichiers de déploiement (RunPod / Docker)
+##########################################
+# Images Docker construites localement
+# (Si vous ne voulez pas les garder)
+# *.tar
+
+# Fichiers et dossiers spécifiques à RunPod / Ollama
+# Les modèles Ollama téléchargés (si vous ne les intégrez pas au build)
+# Le dossier .ollama sera ignoré par défaut s'il est dans le venv, mais
+# pour la sécurité, si vous le créez dans /root
+.ollama/
+
+# Le dossier des données temporaires de Sparrow (si créé)
+data/
