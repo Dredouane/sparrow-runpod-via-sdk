@@ -1,36 +1,127 @@
 #!/bin/bash
-set -e
+set -e  # Arrêter en cas d'erreur
 
-# --- 1. Démarrage d'Ollama ---
-echo "Démarrage du service Ollama en arrière-plan..."
+echo "========================================="
+echo "🔍 Vérifications préliminaires"
+echo "========================================="
 
-# CRITIQUE: Définir l'hôte pour que l'API Python puisse se connecter à Ollama
-export OLLAMA_HOST=0.0.0.0
+# Vérifier que ollama est installé
+if ! command -v ollama &> /dev/null; then
+    echo "❌ ERREUR: ollama n'est pas installé ou pas dans le PATH"
+    echo "Recherche d'ollama..."
+    find / -name ollama -type f 2>/dev/null || echo "Ollama introuvable sur le système"
+    exit 1
+fi
 
-# Démarrer le service Ollama
-ollama serve &
+echo "✅ Ollama trouvé: $(which ollama)"
+echo "Version: $(ollama --version 2>&1 || echo 'Version non disponible')"
 
-# Attendre que le service Ollama soit prêt
-sleep 15 
-# --- 2. Téléchargement du Modèle (Pour garantir la présence avant l'API) ---
-echo "Téléchargement du modèle Mistral 7B..."
-# Cette commande s'exécutera dans l'environnement le plus stable du run.sh
-ollama pull mistral:7b-instruct-v0.2 || { 
-  echo "Erreur critique : Le téléchargement du modèle Ollama a échoué. Arrêt du Pod."
-  # Permet d'échouer le Pod si le modèle ne peut pas être téléchargé
-  exit 1 
-}
+# Vérifier les GPUs disponibles
+echo ""
+echo "🎮 Vérification des GPUs:"
+nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv,noheader 2>/dev/null || echo "⚠️  nvidia-smi non disponible"
 
-# --- 2. Lancement de l'API Sparrow ---
-echo "Lancement de l'API Sparrow sur le port 8002 via Uvicorn..."
+# Vérifier les variables d'environnement CUDA
+echo ""
+echo "🔧 Variables d'environnement CUDA:"
+env | grep -i cuda || echo "Aucune variable CUDA définie"
 
-# 1. Se positionner dans le répertoire d'installation de l'API
-# CORRECTION: Utiliser le chemin défini dans le Dockerfile
+echo ""
+echo "========================================="
+echo "🚀 Démarrage du service Ollama"
+echo "========================================="
+
+# Créer le répertoire des modèles si nécessaire
+mkdir -p /root/.ollama/models
+
+# Démarrer Ollama avec logging verbeux
+OLLAMA_DEBUG=1 \
+OLLAMA_HOST=0.0.0.0:11434 \
+ollama serve 2>&1 | tee /tmp/ollama.log &
+
+OLLAMA_PID=$!
+echo "PID Ollama: $OLLAMA_PID"
+
+# Petit délai pour laisser le processus démarrer
+sleep 3
+
+# Vérifier immédiatement si le processus est toujours vivant
+if ! kill -0 $OLLAMA_PID 2>/dev/null; then
+    echo ""
+    echo "❌ ERREUR CRITIQUE: Le processus Ollama s'est arrêté immédiatement!"
+    echo ""
+    echo "📋 Logs Ollama complets:"
+    echo "----------------------------------------"
+    cat /tmp/ollama.log
+    echo "----------------------------------------"
+    echo ""
+    echo "🔍 Dernières lignes de dmesg (erreurs kernel):"
+    dmesg | tail -20
+    exit 1
+fi
+
+# Attendre qu'Ollama soit prêt (maximum 60 secondes)
+echo ""
+echo "⏳ Attente du démarrage d'Ollama..."
+MAX_WAIT=60
+WAITED=0
+while [ $WAITED -lt $MAX_WAIT ]; do
+    if curl -s http://localhost:11434/api/tags >/dev/null 2>&1; then
+        echo "✅ Ollama est prêt et répond aux requêtes!"
+        break
+    fi
+    
+    # Vérifier si le processus Ollama est toujours vivant
+    if ! kill -0 $OLLAMA_PID 2>/dev/null; then
+        echo ""
+        echo "❌ ERREUR: Le processus Ollama s'est arrêté prématurément!"
+        echo ""
+        echo "📋 Logs Ollama:"
+        echo "----------------------------------------"
+        cat /tmp/ollama.log
+        echo "----------------------------------------"
+        exit 1
+    fi
+    
+    echo "⏳ Attente d'Ollama... ($WAITED/$MAX_WAIT secondes)"
+    sleep 2
+    WAITED=$((WAITED + 2))
+done
+
+if [ $WAITED -ge $MAX_WAIT ]; then
+    echo ""
+    echo "❌ ERREUR: Ollama n'a pas démarré dans les temps!"
+    echo ""
+    echo "📋 Logs Ollama:"
+    echo "----------------------------------------"
+    cat /tmp/ollama.log
+    echo "----------------------------------------"
+    exit 1
+fi
+
+# Test de l'API Ollama
+echo ""
+echo "🧪 Test de l'API Ollama:"
+curl -s http://localhost:11434/api/tags | head -20
+
+echo ""
+echo "========================================="
+echo "🚀 Démarrage de l'application Sparrow"
+echo "========================================="
+
 cd /app/sparrow_app
 
-# 2. Lancer Uvicorn en utilisant le module 'api' (résolu localement)
-# Le PYTHONPATH n'est plus nécessaire.
-PYTHONUNBUFFERED=1 python3 -m uvicorn api:app --host 0.0.0.0 --port 8002 --workers 1
+# Vérifier que le fichier main.py existe
+if [ ! -f "main.py" ]; then
+    echo "❌ ERREUR: main.py introuvable dans /app/sparrow_app"
+    echo "Contenu du répertoire:"
+    ls -la
+    exit 1
+fi
 
-# Garder le conteneur actif
-wait
+echo "✅ Fichier main.py trouvé"
+echo ""
+echo "📝 Démarrage de l'API Sparrow sur le port 8002..."
+
+# Démarrer l'application Sparrow
+exec uvicorn main:app --host 0.0.0.0 --port 8002 --log-level info
