@@ -1,9 +1,10 @@
-# Fichier: Dockerfile (Optimisé - Multi-Stage Build)
+# Fichier: Dockerfile (Alternative avec image PyTorch officielle)
 
 # ====================================================================
 # ÉTAPE 1: builder (Phase d'installation des dépendances lourdes)
 # ====================================================================
-FROM nvcr.io/nvidia/pytorch:24.11-py3 AS builder
+# Utiliser l'image PyTorch officielle (pas besoin d'auth NVIDIA)
+FROM pytorch/pytorch:2.5.1-cuda12.4-cudnn9-runtime AS builder
 
 WORKDIR /app
 
@@ -18,12 +19,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements_docker.txt .
 RUN pip install --no-cache-dir -r requirements_docker.txt
 
-# 3. [SUPPRIMÉ] Installation d'Ollama déplacée dans l'image finale
-
 # ====================================================================
 # ÉTAPE 2: final (Phase de production - Installation directe d'Ollama)
 # ====================================================================
-FROM nvcr.io/nvidia/pytorch:24.11-py3 AS final
+FROM pytorch/pytorch:2.5.1-cuda12.4-cudnn9-runtime AS final
 
 WORKDIR /app
 
@@ -38,16 +37,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # 2. Copier le runtime Python (les packages installés) de l'étape builder
-COPY --from=builder /usr/local/lib/python3.12/dist-packages /usr/local/lib/python3.12/dist-packages
-COPY --from=builder /usr/local/bin /usr/local/bin
+# L'image PyTorch utilise conda, donc les packages sont dans /opt/conda
+COPY --from=builder /opt/conda /opt/conda
 
 # 3. Créer le répertoire pour les modèles Ollama
 RUN mkdir -p /root/.ollama/models
 
-# 5. Copier le code de l'application (sparrow/sparrow-ml/llm)
+# 4. Copier le code de l'application (sparrow/sparrow-ml/llm)
 COPY sparrow/sparrow-ml/llm /app/sparrow_app
 
-# 6. Copier le script de lancement run.sh et le rendre exécutable
+# 5. Copier le script de lancement run.sh et le rendre exécutable
 COPY run.sh .
 RUN chmod +x run.sh
 

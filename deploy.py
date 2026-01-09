@@ -79,10 +79,7 @@ for gpu_type in GPU_FALLBACK:
             ports="8002/http,11434/http",  # Ajout du port Ollama pour debug
             
             # Variables d'environnement
-            env=container_env,
-            
-            # Arguments Docker (optionnel, pour forcer l'accès GPU)
-            docker_args="--gpus all"
+            env=container_env
         )
         
         print(f"✅ Pod créé avec succès!")

@@ -111,17 +111,17 @@ echo "========================================="
 
 cd /app/sparrow_app
 
-# Vérifier que le fichier main.py existe
-if [ ! -f "main.py" ]; then
-    echo "❌ ERREUR: main.py introuvable dans /app/sparrow_app"
+# Vérifier que le fichier api.py existe
+if [ ! -f "api.py" ]; then
+    echo "❌ ERREUR: api.py introuvable dans /app/sparrow_app"
     echo "Contenu du répertoire:"
     ls -la
     exit 1
 fi
 
-echo "✅ Fichier main.py trouvé"
+echo "✅ Fichier api.py trouvé"
 echo ""
 echo "📝 Démarrage de l'API Sparrow sur le port 8002..."
 
 # Démarrer l'application Sparrow
-exec uvicorn main:app --host 0.0.0.0 --port 8002 --log-level info
+exec uvicorn api:app --host 0.0.0.0 --port 8002 --log-level info

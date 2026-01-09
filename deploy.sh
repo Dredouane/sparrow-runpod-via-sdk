@@ -23,6 +23,8 @@ fi
 
 IMAGE_NAME="dekarredouane/sparrow-runpod:latest"
 
+
+
 echo "🔨 Build de l'image Docker avec BuildKit et cache distant..."
 # Utilisation de la variable pour le build
 docker build --cache-from $IMAGE_NAME -t $IMAGE_NAME .
