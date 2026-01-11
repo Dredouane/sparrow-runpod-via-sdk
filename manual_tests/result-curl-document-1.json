@@ -1,0 +1,76 @@
+{
+   "informations_société":{
+      "nom":"SPA MAX MAINTENANCE SERVICE",
+      "adresse":"Cité Sbaat n° 33 Rouiba Alger, Algérie",
+      "capital":"200 000 000,00 DA",
+      "mobile":"+213 561 62 23 90 / +213 560 07 88 55",
+      "nrc":"17B1043861 16/00",
+      "nai":"164 20 22 33 42",
+      "nif":"00 17 16 10 43 86 175 / NIS: 00 17 16 42 00 2A 021 00004 113",
+      "rib":"BNP 027 00708 0000720001 95 / NATIXIS 020 00162 732222001-39 / SG"
+   },
+   "client":{
+      "reference":"CN000213",
+      "entreprise":"SARL ALBAG",
+      "adresse":"RN N°05 SAF SAF LOT N°03, TIDJALABINE BOUMERDES",
+      "id_fiscal":"000135 072 327 496",
+      "id_statistique":"",
+      "article":"35130482528",
+      "rc":"35/00-0723274B01"
+   },
+   "véhicule":{
+      "marque":"MERCEDES",
+      "modele":"ACTROS",
+      "matricule":"00190-516-35",
+      "numero_chassis":"WDB9340135L870380",
+      "kilometrage":"458 225"
+   },
+   "lignes_produits":[
+      {
+         "reference":"960796E",
+         "designation":"PLAQUETTE DE FREIN ACTROS",
+         "quantite":1,
+         "prix_unitaire":28571.43,
+         "tva":0,
+         "montant_ht":28571.43
+      },
+      {
+         "reference":"A00642053330",
+         "designation":"PLAQUETTE DE FREIN ARRIERE ACTROS",
+         "quantite":1,
+         "prix_unitaire":28571.43,
+         "tva":0,
+         "montant_ht":28571.43
+      },
+      {
+         "reference":"14123106",
+         "designation":"DISQUE DE FREIN ACTROS",
+         "quantite":2,
+         "prix_unitaire":42857.14,
+         "tva":0,
+         "montant_ht":85714.28
+      },
+      {
+         "reference":"DIS4023",
+         "designation":"DISQUE DE FREIN AR ACTROS",
+         "quantite":2,
+         "prix_unitaire":42857.14,
+         "tva":0,
+         "montant_ht":85714.28
+      },
+      {
+         "reference":"MO_MECANIQUE",
+         "designation":"MAIN OEUVRE MACANIQUE",
+         "quantite":9,
+         "prix_unitaire":1700,
+         "tva":0,
+         "montant_ht":15300
+      }
+   ],
+   "totaux":{
+      "total_ht_brut":243871.4,
+      "total_ht_net":243871.4,
+      "tva":46335.57,
+      "total_ttc":290206.99
+   }
+}

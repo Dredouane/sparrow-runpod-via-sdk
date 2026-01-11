@@ -99,6 +99,10 @@ if [ $WAITED -ge $MAX_WAIT ]; then
     exit 1
 fi
 
+echo ""
+echo "📥 Téléchargement du modèle qwen2.5vl:7b (si non présent)..."
+ollama pull qwen2.5vl:7b
+
 # Test de l'API Ollama
 echo ""
 echo "🧪 Test de l'API Ollama:"

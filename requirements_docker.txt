@@ -1,4 +1,4 @@
-# Fichier: requirements_docker.txt
+# Fichier: requirements_docker.txt (Corrigé pour la compatibilité 3.12/Sparrow 1.2.1)
 
 python-multipart
 rich
@@ -7,14 +7,10 @@ fastapi==0.124.4
 uvicorn[standard]
 sparrow-parse==1.1.9
 genson==1.3.0
-jsonschema==4.25.1
 python-dotenv
 python-box
-torchvision
+
 oracledb==3.4.1
 
-# Dépendances spécifiques du conteneur (ollama client)
 ollama
-
-# Dépendances pour le traitement des documents (crucial pour Sparrow)
 pdfminer.six

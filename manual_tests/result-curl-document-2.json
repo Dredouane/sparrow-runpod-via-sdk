@@ -1,0 +1,84 @@
+{
+   "informations_société":{
+      "nom":"Société Nationale de Commercialisation et de Distribution de Produits Pétroliers",
+      "adresse":"BP. 73 Route des Dunes - Chéraga Alger RC 99 B 9091",
+      "NIF":"099916000989164"
+   },
+   "client":{
+      "nom":"SARL ALBAG",
+      "adresse":"RTE NLE N?05 TIDJELABINE",
+      "code_client":"W4292",
+      "code_reglement":"SA",
+      "code_réglement":"22",
+      "code_comptant":"0",
+      "n_comptant":"004"
+   },
+   "totaux":{
+      "total_ttc":"707 622,67",
+      "total_encaisser":"707 622,67",
+      "nature_paiement":"Espèces",
+      "chec_no":"5622",
+      "montant_total_encaisser":"707 622,67"
+   },
+   "lignes_produits":[
+      {
+         "designation":"GAS OIL",
+         "code_produit":"16020",
+         "quantite":"799",
+         "prix_unitaire":"1 301,03",
+         "montant":"351 278,10"
+      },
+      {
+         "designation":"RISTOURNE TRANSPORT GASOIL",
+         "code_produit":"701101",
+         "quantite":"270,00",
+         "prix_unitaire":"6 480,00",
+         "montant":"6 480,00"
+      },
+      {
+         "designation":"TVA SUR AUTRES PROD.& PREST. 19.00%",
+         "code_produit":"5474",
+         "quantite":"",
+         "prix_unitaire":"6,67",
+         "montant":"6,67"
+      },
+      {
+         "designation":"TVA SUR VENTES P.PETROLIERS 19.00%",
+         "code_produit":"5477",
+         "quantite":"",
+         "prix_unitaire":"111 681,64",
+         "montant":"111 681,64"
+      },
+      {
+         "designation":"TAXE ADDITIONNELLE SUR LES",
+         "code_produit":"5478",
+         "quantite":"",
+         "prix_unitaire":"8 100,00",
+         "montant":"8 100,00"
+      },
+      {
+         "designation":"REDEVANCE DE GESTION TPE",
+         "code_produit":"700138",
+         "quantite":"",
+         "prix_unitaire":"35,10",
+         "montant":"35,10"
+      },
+      {
+         "designation":"TPP SUR MARCHANDISE(SOUmise A TVA)",
+         "code_produit":"70701",
+         "quantite":"",
+         "prix_unitaire":"243 000,00",
+         "montant":"243 000,00"
+      },
+      {
+         "designation":"ECART SUR PRIX (DECRETE/ CALCULE)",
+         "code_produit":"7988",
+         "quantite":"",
+         "prix_unitaire":"1,16",
+         "montant":"1,16"
+      }
+   ],
+   "totaux-cohérents":true,
+   "commentaire-totaux":"Les totaux sont cohérents avec les sommes des lignes de produits.",
+   "taux-confience-extraction-generale":95
+}

@@ -36,6 +36,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && curl -fsSL https://ollama.com/install.sh | sh \
     && rm -rf /var/lib/apt/lists/*
 
+
+
 # 2. Copier le runtime Python (les packages installés) de l'étape builder
 # L'image PyTorch utilise conda, donc les packages sont dans /opt/conda
 COPY --from=builder /opt/conda /opt/conda

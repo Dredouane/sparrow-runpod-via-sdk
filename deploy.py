@@ -56,7 +56,7 @@ container_env = {
     
     # Variables de votre application
     "MODEL_ID": "sparrow-model-name",
-    "OLLAMA_MODEL": "llama3:8b"
+    "OLLAMA_MODEL": "qwen2.5vl:7b"
 }
 
 # Essayer de créer le pod avec fallback GPU
